@@ -6,6 +6,10 @@ from flask_bcrypt import Bcrypt
 DB_NAME = "dictionary.db"
 app = Flask(__name__)
 
+bcrypt = Bcrypt(app)
+app.secret_key = "sefofe@#$%**jkvbuseb22BUJBBOPVIUBZPuboiserfbuso@#@##21ashjsrf77755kl%^$##"
+
+
 
 def create_connection(db_file):
     # creates connection to database
