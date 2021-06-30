@@ -20,15 +20,15 @@ def create_connection(db_file):
         print(e)
 
 
-# def get_words():
-#     con = create_connection(DB_NAME)
-#     query = "SELECT id, words" \
-#             " FROM Insert ORDER BY * ASC"
-#     cur = con.cursor()  # You need this line next
-#     cur.execute(query)  # this line actually executes the query
-#     class_list = cur.fetchall()  # puts the results into a list usable in python
-#    con.close()
-#    return class_list
+ def get_words():
+     con = create_connection(DB_NAME)
+     query = "SELECT id, words" \
+             " FROM Insert ORDER BY * ASC"
+     cur = con.cursor()  # You need this line next
+     cur.execute(query)  # this line actually executes the query
+     class_list = cur.fetchall()  # puts the results into a list usable in python
+    con.close()
+    return words
 
 
 @app.route('/')
