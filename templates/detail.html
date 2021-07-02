@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Maōri Dictionary | Home{% endblock %}
+
+{% block heading %}Maōri - English Dictionary{% endblock %}
+
+{% block main %}
+<table>
+    <tr>
+        <th>Maori Word</th>
+        <th>English Word</th>
+        <th>Definition</th>
+        <th>Difficulty</th>
+    </tr>
+{#    {% for definition in definitions %}#}
+    <tr>
+        <td>{{ definition[1] }}</td>
+        <td>{{ definition[2] }}</td>
+        <td>{{ definition[3] }}</td>
+        <td>{{ definition[4] }}</td>
+        <td><img src="/static/images/{{ definition[5] }}.jpg"></td>
+    </tr>
+{#    {% endfor %}#}
+</table>
+{% endblock %}

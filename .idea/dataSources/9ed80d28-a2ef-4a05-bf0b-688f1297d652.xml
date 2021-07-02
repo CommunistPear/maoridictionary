@@ -1420,7 +1420,7 @@
       <Position>4</Position>
       <DataType>varchar(300)|0s</DataType>
     </column>
-    <column id="515" parent="174" name="level">
+    <column id="515" parent="174" name="difficulty_level">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
     </column>
