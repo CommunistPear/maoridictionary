@@ -1,50 +1,55 @@
-
 <!doctype html>
 <html lang="en">
 <head>
-	<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Suez+One&display=swap" rel="stylesheet">
-	<title>{% block title %}{% endblock %}</title>
-	<meta name="Description" content="Author: D Benseman, Content: A dictionary to convert maori words to english.">
+   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Suez+One&display=swap" rel="stylesheet">
+   <title>{% block title %}{% endblock %}</title>
+   <meta name="Description" content="Author: C Main, Content: A dictionary to convert maori words to english.">
 </head>
 
 <body>
-	<div id="container">
+   <div id="container">
 
-		<header>
-			<h1>{% block heading %}{% endblock %}</h1>
-		</header>
+      <header>
+         <h1>{% block heading %}{% endblock %}</h1>
+      </header>
 
-		<nav>
+      <nav>
             <input type="checkbox" name="drop_down_menu" />
-			<span></span>
-			<span></span>
-			<span></span>
-			<ul>
+         <span></span>
+         <span></span>
+         <span></span>
+         <ul>
                 <li><a href="\">Home</a></li>
+                {% for category in categories %}
+                <li><a href="/categories/{{ category[0] }}">{{category[1]}}</a></li>
+                {% endfor %}
+         <li>
+             {% if logged_in %}<a href="/logout">Log out</a>{% else %}
+             <a href="/login">Log in</a></li>{% endif %}
+         </ul>
+      </nav>
 
-			</ul>
-		</nav>
 
+      <!--
+      =====================================================
+      == Content row of the template.                 ==
+      =====================================================
+      -->
 
-		<!--
-		=====================================================
-		== Content row of the template.                 ==
-		=====================================================
-		-->
-
-		<main>
+      <main>
             {% block main%}{% endblock %}
-        </main>
+      </main>
 
 
-		<footer>
-			<p>
-				&copy; Caelan 2021
-			</p>
-		</footer>
 
-	</div>
+      <footer>
+         <p>
+            &copy;Caelan Main
+         </p>
+      </footer>
+
+   </div>
 </body>
 </html>

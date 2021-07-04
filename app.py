@@ -3,7 +3,7 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DB_NAME = "dictionary.db"
+DB_NAME = "C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/Maori Dictionary/Maori Dictionary/dictionary.db"
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
@@ -109,6 +109,7 @@ def create_connection(db_file):
     """create a connection to the sqlite db - maori.db"""
     try:
         connection = sqlite3.connect(db_file)
+        print(connection)
         return connection
     except Error as e:
         print(e)
@@ -118,6 +119,8 @@ def create_connection(db_file):
 
 def fetch_categories():
     con = create_connection(DB_NAME)
+    print(DB_NAME)
+    print(con)
     query = "SELECT id, category_name FROM category"
     cur = con.cursor()
     cur.execute(query)
@@ -143,7 +146,7 @@ def render_categories(cat_id):
     definitions = cur.fetchall()
     print(definitions)
     con.close()
-    return render_template('categories.html', definitions=definitions, logged_in=is_logged_in(),
+    return render_template('words.html', definitions=definitions, logged_in=is_logged_in(),
                            categories=fetch_categories())
 
 
