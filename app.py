@@ -139,13 +139,15 @@ def render_homepage():
 @app.route('/categories/<cat_id>')
 def render_categories(cat_id):
     con = create_connection(DB_NAME)
-    query = "SELECT maori, english, definition, difficulty_level, images FROM words WHERE category=?" \
+    query = "SELECT id, maori, english, definition, difficulty_level, images FROM words WHERE category=?" \
         # "ORDER BY maori_word ASC"
     cur = con.cursor()
     cur.execute(query, (cat_id,))
     definitions = cur.fetchall()
     print(definitions)
     con.close()
+    categories=fetch_categories()
+    print (categories)
     return render_template('words.html', definitions=definitions, logged_in=is_logged_in(),
                            categories=fetch_categories())
 

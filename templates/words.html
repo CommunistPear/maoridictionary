@@ -5,19 +5,28 @@
 {% block heading %}Maōri - English Dictionary{% endblock %}
 
 {% block main %}
-<table>
-    <tr>
-        <th>Maori Word</th>
-        <th>English Word</th>
-        <th>Definition</th>
-    </tr>
-        {% for definition in definitions %}
+    <table>
         <tr>
-             <td><a href="/word/{{ definition[0] }}/{{ definition[1] }}">{{ definition[1] }}</td>
-             <td>{{ definition[2] }}</td>
-             <td>{{ definition[3] }}</td>
-             <td><img src="/static/images/{{ definition[2] }}.png"></td>
+            <th>Maori Word</th>
+            <th>English Word</th>
+            <th>Definition</th>
+            <th>Image</th>
         </tr>
-    {% endfor %}
-</table>
+        {% for definition in definitions %}
+            <tr>
+                <td><a href="/word/{{ definition[0] }}/{{ definition[1] }}">{{ definition[1] }}</td>
+                <td>{{ definition[2] }}</td>
+                <td>{{ definition[3] }}</td>
+                <td>
+                    <object data="/static/images/{{ definition[2] }}.png" type="image/png">
+                        <img src="/static/images/noimage.png"
+                             alt="">
+                    </object>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
+
+<td><a href="/word/{{ definition[0] }}/{{ definition[1] }}">{{ definition[1] }}</td>
+<td>{{ definition[2] }}</td>
+<td>{{ definition[3] }}</td>
