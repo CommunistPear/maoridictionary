@@ -129,11 +129,13 @@ def fetch_categories():
     return categories
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def render_homepage():
     print("loading home page")
     return render_template('home.'
                            'html', logged_in=is_logged_in(), categories=fetch_categories())
+
+
 
 
 @app.route('/categories/<cat_id>')
@@ -146,8 +148,8 @@ def render_categories(cat_id):
     definitions = cur.fetchall()
     print(definitions)
     con.close()
-    categories=fetch_categories()
-    print (categories)
+    categories = fetch_categories()
+    print(categories)
     return render_template('words.html', definitions=definitions, logged_in=is_logged_in(),
                            categories=fetch_categories())
 
