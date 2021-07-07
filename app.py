@@ -3,7 +3,8 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DB_NAME = "C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/Maori Dictionary/Maori Dictionary/dictionary.db"
+DB_NAME = 'C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/Maori Dictionary/Maori ' \
+          'Dictionary/dictionary.db '
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
@@ -135,7 +136,21 @@ def render_homepage():
     return render_template('home.'
                            'html', logged_in=is_logged_in(), categories=fetch_categories())
 
+    category = request.form.get('category_name').strip().title()
 
+    con = create_connection(DB_NAME)
+
+    query = "INSERT INTO category (category_name) " \
+            "VALUES(?)"
+
+    cur = con.cursor()  # You need this line next
+    try:
+        cur.execute(query, categoty_name)  # this line actually executes the query
+    except sqlite3.IntegrityError:
+        return redirect('/signup?error=Email+is+already+used')
+
+    con.commit()
+    con.close()
 
 
 @app.route('/categories/<cat_id>')

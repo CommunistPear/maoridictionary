@@ -1339,6 +1339,7 @@
     <column id="495" parent="170" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
+      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="496" parent="170" name="category_name">
       <Position>2</Position>
@@ -1349,115 +1350,120 @@
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <column id="498" parent="171" name="type">
+    <key id="498" parent="170" name="category_pk">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>category_id_uindex</UnderlyingIndexName>
+    </key>
+    <column id="499" parent="171" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="499" parent="171" name="name">
+    <column id="500" parent="171" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="500" parent="171" name="tbl_name">
+    <column id="501" parent="171" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="501" parent="171" name="rootpage">
+    <column id="502" parent="171" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="502" parent="171" name="sql">
+    <column id="503" parent="171" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="503" parent="172" name="name">
+    <column id="504" parent="172" name="name">
       <Position>1</Position>
     </column>
-    <column id="504" parent="172" name="seq">
+    <column id="505" parent="172" name="seq">
       <Position>2</Position>
     </column>
-    <column id="505" parent="173" name="id">
+    <column id="506" parent="173" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="506" parent="173" name="email">
+    <column id="507" parent="173" name="email">
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="507" parent="173" name="f_name">
+    <column id="508" parent="173" name="f_name">
       <Position>3</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="508" parent="173" name="l_name">
+    <column id="509" parent="173" name="l_name">
       <Position>4</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="509" parent="173" name="password">
+    <column id="510" parent="173" name="password">
       <Position>5</Position>
       <DataType>varchar(24)|0s</DataType>
     </column>
-    <index id="510" parent="173" name="users_id_uindex">
+    <index id="511" parent="173" name="users_id_uindex">
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="511" parent="173" name="users_email_uindex">
+    <index id="512" parent="173" name="users_email_uindex">
       <ColNames>email</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <column id="512" parent="174" name="maori">
+    <column id="513" parent="174" name="maori">
       <Position>1</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="513" parent="174" name="english">
+    <column id="514" parent="174" name="english">
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="514" parent="174" name="category">
+    <column id="515" parent="174" name="category">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="515" parent="174" name="definition">
+    <column id="516" parent="174" name="definition">
       <Position>4</Position>
       <DataType>varchar(300)|0s</DataType>
     </column>
-    <column id="516" parent="174" name="difficulty_level">
+    <column id="517" parent="174" name="difficulty_level">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="517" parent="174" name="images">
+    <column id="518" parent="174" name="images">
       <Position>6</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="518" parent="174" name="id">
+    <column id="519" parent="174" name="id">
       <Position>7</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="519" parent="175" name="maori">
+    <column id="520" parent="175" name="maori">
       <Position>1</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="520" parent="175" name="english">
+    <column id="521" parent="175" name="english">
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="521" parent="175" name="category">
+    <column id="522" parent="175" name="category">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="522" parent="175" name="definition">
+    <column id="523" parent="175" name="definition">
       <Position>4</Position>
       <DataType>varchar(300)|0s</DataType>
     </column>
-    <column id="523" parent="175" name="difficulty_level">
+    <column id="524" parent="175" name="difficulty_level">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="524" parent="175" name="images">
+    <column id="525" parent="175" name="images">
       <Position>6</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="525" parent="175" name="id">
+    <column id="526" parent="175" name="id">
       <Position>7</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
