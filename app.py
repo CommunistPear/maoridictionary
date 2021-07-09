@@ -132,25 +132,30 @@ def fetch_categories():
 
 @app.route('/', methods=['GET', 'POST'])
 def render_homepage():
+
+    if request.method == "POST":
+
+        category_name = request.form.get('category_name').strip().title()
+
+        con = create_connection(DB_NAME)
+
+        query = "INSERT INTO category (category_name) " \
+                "VALUES(?)"
+
+        cur = con.cursor()  # You need this line next
+        try:
+            cur.execute(query, category_name)  # this line actually executes the query
+        except sqlite3.IntegrityError:
+            return redirect('/signup?error=Category+already+exists')
+        print(category_name)
+        con.commit()
+        con.close()
+
+        return redirect('/?message=Thank+you+for+creating+a+category!')
+
     print("loading home page")
     return render_template('home.'
                            'html', logged_in=is_logged_in(), categories=fetch_categories())
-
-    category = request.form.get('category_name').strip().title()
-
-    con = create_connection(DB_NAME)
-
-    query = "INSERT INTO category (category_name) " \
-            "VALUES(?)"
-
-    cur = con.cursor()  # You need this line next
-    try:
-        cur.execute(query, categoty_name)  # this line actually executes the query
-    except sqlite3.IntegrityError:
-        return redirect('/signup?error=Email+is+already+used')
-
-    con.commit()
-    con.close()
 
 
 @app.route('/categories/<cat_id>')
