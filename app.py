@@ -130,26 +130,28 @@ def fetch_categories():
     return categories
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=["GET", "POST"])
 def render_homepage():
-
-    if request.method == "POST":
-
-        category_name = request.form.get('category_name').strip().title()
-
-        con = create_connection(DB_NAME)
-
-        query = "INSERT INTO category (category_name) " \
-                "VALUES(?)"
-
-        cur = con.cursor()  # You need this line next
-        try:
-            cur.execute(query, category_name)  # this line actually executes the query
-        except sqlite3.IntegrityError:
-            return redirect('/signup?error=Category+already+exists')
+    if request.method == "POST" and is_logged_in():
+        category_name = request.form.get('category').strip().lower()
         print(category_name)
-        con.commit()
-        con.close()
+        if len(category_name) < 3:
+            return redirect("/?error=Name+must+be+at+least+3+letters+long.")
+        else:
+            # connect to the database
+            con = create_connection(DB_NAME)
+
+            query = "INSERT INTO category (id, category_name) VALUES(NULL, ?)"
+
+            cur = con.cursor()  # You need this line next
+            try:
+                cur.execute(query, (category_name, ))  # this line actually executes the query
+            except:
+                return redirect('/menu?error=Unknown+error')
+
+            con.commit()
+            con.close()
+
 
         return redirect('/?message=Thank+you+for+creating+a+category!')
 

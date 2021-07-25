@@ -8,14 +8,14 @@
 This is an English - Māori dictionary which shows definitions, photos and difficulty for each word.
 {% if logged_in %}
     <li>You are logged in</li>
-        <form> class="dataForm" method="POST">
-    <div class="form-group">
-            <div class="form-label"><label for="category">Add a category:</label></div>
-            <div class="form-element"><input name="category" id="category" type="category"></div>
+    <form class="dataForm" method="POST">
+        <div class="form-group">
+                <div class="form-label"><label for="category">Add a category:</label></div>
+                <div class="form-element"><input name="category" id="category" type="text"></div>
+            </div>
+        <div class="form-group">
+            <div class="form-element"><input type="submit"></div>
         </div>
-    <div class="form-group">
-        <div class="form-element"><input type="submit"></div>
-    </div>
     </form>
 
 {% else %}
