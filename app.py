@@ -145,13 +145,12 @@ def render_homepage():
 
             cur = con.cursor()  # You need this line next
             try:
-                cur.execute(query, (category_name, ))  # this line actually executes the query
+                cur.execute(query, (category_name,))  # this line actually executes the query
             except:
                 return redirect('/menu?error=Unknown+error')
 
             con.commit()
             con.close()
-
 
         return redirect('/?message=Thank+you+for+creating+a+category!')
 
