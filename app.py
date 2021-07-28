@@ -4,9 +4,9 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-# DB_NAME = 'C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/Maori Dictionary/Maori ' \
-#          'Dictionary/dictionary.db '
-DB_NAME = 'C:/Users/caela/Documents/School/WC/13DTS/maoridictionary/dictionary.db'
+DB_NAME = 'C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/Maori Dictionary/Maori ' \
+          'Dictionary/dictionary.db '
+#DB_NAME = 'C:/Users/caela/Documents/School/WC/13DTS/maoridictionary/dictionary.db'
 
 app = Flask(__name__)
 
@@ -230,6 +230,9 @@ def render_detail(word_id):
     return render_template('detail.html', definition=definition, logged_in=is_logged_in(),
                            categories=fetch_categories())
 
+#@app.route("/delete", methods=["GET", "POST"])
+#def delete_category():
+#    if
 
 if __name__ == '__main__':
     app.run(debug=True)
