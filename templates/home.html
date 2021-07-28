@@ -16,6 +16,42 @@ This is an English - Māori dictionary which shows definitions, photos and diffi
         <div class="form-group">
             <div class="form-element"><input type="submit"></div>
         </div>
+
+        <h3>Add a word to the dictionary</h3>
+        <div class="form-group">
+            <div class="form-label"><label for="maori_word">Maori Word:</label></div>
+            <div class="form-element"><input type="text" name="maori_word" id="maori_word" required></div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-label"><label for="first_name">English Word:</label></div>
+            <div class="form-element"><input type="text" name="first_name" id="first_name" required></div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-label"><label for="definition">Definition:</label></div>
+            <div class="form-element"><input type="text" name="definition" id="definition" min="9" max="13" step="1" required></div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-label"><label for="category">Category:</label></div>
+            <div class="form-element"><input type="number" name="category" id="category" min="1" max="21999" step="1" required></div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-label"><label for="email">Difficulty Level:</label></div>
+            <div class="form-element"><input type="number" name="email" id="email" required></div>
+        </div>
+
+        <div class="form-group">
+            <div></div>
+            <div class="form-element"><input type="reset"></div>
+        </div>
+
+        <div class="form-group">
+            <div></div>
+            <div class="form-element"><input type="submit"></div>
+        </div>
     </form>
 
 {% else %}
