@@ -5,56 +5,69 @@
 {% block heading %}Māori - English Dictionary{% endblock %}
 
 {% block main %}
-This is an English - Māori dictionary which shows definitions, photos and difficulty for each word.
-{% if logged_in %}
-    <li>You are logged in</li>
-    <form class="dataForm" method="POST">
-        <div class="form-group">
-                <div class="form-label"><label for="category">Add a category:</label></div>
+    This is an English - Māori dictionary which shows definitions, photos and difficulty for each word.
+    {% if logged_in %}
+        <li>You are logged in</li>
+        <form class="dataForm" method="POST" id="category_form">
+            <input type="hidden" name="form" value="category">
+            <h3>Add a category to the dictionary</h3>
+            <div class="form-group">
+                <div class="form-label"><label for="category">Category name:</label></div>
                 <div class="form-element"><input name="category" id="category" type="text"></div>
             </div>
-        <div class="form-group">
-            <div class="form-element"><input type="submit"></div>
-        </div>
+            <div class="form-group">
+                <div class="form-element"><input type="submit" value="Submit category"></div>
+            </div>
+        </form>
 
-        <h3>Add a word to the dictionary</h3>
-        <div class="form-group">
-            <div class="form-label"><label for="maori_word">Maori Word:</label></div>
-            <div class="form-element"><input type="text" name="maori_word" id="maori_word" required></div>
-        </div>
+        <form class="dataForm" method="POST" id="word_form">
+        <input type="hidden" name="form" value="word">
+            <h3>Add a word to the dictionary</h3>
+            <div class="form-group">
+                <div class="form-label"><label for="maori_word">Maori Word:</label></div>
+                <div class="form-element"><input type="text" name="maori_word" id="maori_word" required></div>
+            </div>
 
-        <div class="form-group">
-            <div class="form-label"><label for="first_name">English Word:</label></div>
-            <div class="form-element"><input type="text" name="first_name" id="first_name" required></div>
-        </div>
+            <div class="form-group">
+                <div class="form-label"><label for="english_word">English Word:</label></div>
+                <div class="form-element"><input type="text" name="english_word" id="english_word" required></div>
+            </div>
 
-        <div class="form-group">
-            <div class="form-label"><label for="definition">Definition:</label></div>
-            <div class="form-element"><input type="text" name="definition" id="definition" min="9" max="13" step="1" required></div>
-        </div>
+            <div class="form-group">
+                <div class="form-label"><label for="definition">Definition:</label></div>
+                <div class="form-element"><input type="text" name="definition" id="definition" min="9" max="13" step="1"
+                                                 required></div>
+            </div>
 
-        <div class="form-group">
-            <div class="form-label"><label for="category">Category:</label></div>
-            <div class="form-element"><input type="number" name="category" id="category" min="1" max="21999" step="1" required></div>
-        </div>
+            <div class="form-group">
+                <div class="form-label"><label for="category">Category:</label></div>
+                <div class="form-element">
+                    <select name="category" id='category'>
+                        {% for category in categories %}
+                            <option value="{{ category[0] }}">{{ category[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
 
-        <div class="form-group">
-            <div class="form-label"><label for="email">Difficulty Level:</label></div>
-            <div class="form-element"><input type="number" name="email" id="email" required></div>
-        </div>
+            <div class="form-group">
+                <div class="form-label"><label for="difficulty_level">Difficulty Level:</label></div>
+                <div class="form-element"><input type="number" name="difficulty_level" id="difficulty_level" min="1"
+                                                 max="10" step="1" required></div>
+            </div>
 
-        <div class="form-group">
-            <div></div>
-            <div class="form-element"><input type="reset"></div>
-        </div>
+            <div class="form-group">
+                <div></div>
+                <div class="form-element"><input type="reset"></div>
+            </div>
 
-        <div class="form-group">
-            <div></div>
-            <div class="form-element"><input type="submit"></div>
-        </div>
-    </form>
+            <div class="form-group">
+                <div></div>
+                <div class="form-element"><input type="submit"></div>
+            </div>
+        </form>
 
-{% else %}
-    <li>Create an account or log in to access all aspects on the dictionary</li>
-{% endif %}
+    {% else %}
+        <li>Create an account or log in to access all aspects on the dictionary</li>
+    {% endif %}
 {% endblock %}

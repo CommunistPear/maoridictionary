@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}Maōri Dictionary | Home{% endblock %}
+{% block title %}Māori Dictionary | Home{% endblock %}
 
-{% block heading %}Maōri - English Dictionary{% endblock %}
+{% block heading %}Māori - English Dictionary{% endblock %}
 
 {% block main %}
 <table>
@@ -11,6 +11,7 @@
         <th>English Word</th>
         <th>Definition</th>
         <th>Difficulty</th>
+        <th></th>
     </tr>
 {#    {% for definition in definitions %}#}
     <tr>
@@ -18,7 +19,7 @@
         <td>{{ definition[2] }}</td>
         <td>{{ definition[3] }}</td>
         <td>{{ definition[4] }}</td>
-        <td><img src="/static/images/{{ definition[5] }}.jpg"></td>
+        <td><img src="/static/images/{{ definition[5] }}" alt=""></td>
     </tr>
 {#    {% endfor %}#}
 </table>
