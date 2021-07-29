@@ -227,8 +227,16 @@ def render_detail(word_id):
     definitions = cur.fetchall()
     definition = definitions[0]
     con.close()
+
+    if request.method == "POST" and is_logged_in():
+        query = "DELETE FROM words WHERE id = ?"
+        cur. con.cursor()
+        cur.execute(query, word_id)
+        con.close
+
     return render_template('detail.html', definition=definition, logged_in=is_logged_in(),
                            categories=fetch_categories())
+
 
 #@app.route("/delete", methods=["GET", "POST"])
 #def delete_category():
