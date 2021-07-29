@@ -23,6 +23,7 @@
     </tr>
 {#    {% endfor %}#}
 </table>
-
-    <button id="delete button" onclick="return window.confirm('Are you sure you want to do this karl?')">Delete word </button>
+<form method="post">
+    <input type="submit" id="delete button" onclick="return confirm('Are you sure you want to do this karl?')" value="Delete word">
+</form>
 {% endblock %}

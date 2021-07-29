@@ -1439,6 +1439,7 @@
     <column id="518" parent="174" name="images">
       <Position>6</Position>
       <DataType>varchar(30)|0s</DataType>
+      <DefaultExpression>&apos;noimage.png&apos;</DefaultExpression>
     </column>
     <column id="519" parent="174" name="id">
       <Position>7</Position>
@@ -1449,5 +1450,12 @@
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
+    <foreign-key id="521" parent="174">
+      <ColNames>category</ColNames>
+      <RefTableName>category</RefTableName>
+      <RefKeyName>category_pk</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
   </database-model>
 </dataSource>

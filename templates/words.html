@@ -25,8 +25,12 @@
             </tr>
         {% endfor %}
     </table>
+    <form method="post">
+    <input type="submit" id="delete button" onclick="return confirm('Are you sure?')" value="Delete category">
+</form>
 {% endblock %}
 
 <td><a href="/word/{{ definition[0] }}/{{ definition[1] }}">{{ definition[1] }}</a></td>
 <td>{{ definition[2] }}</td>
 <td>{{ definition[3] }}</td>
+

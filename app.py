@@ -4,9 +4,9 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DB_NAME = 'C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/Maori Dictionary/Maori ' \
-          'Dictionary/dictionary.db '
-#DB_NAME = 'C:/Users/caela/Documents/School/WC/13DTS/maoridictionary/dictionary.db'
+# DB_NAME = 'C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/Maori Dictionary/Maori ' \
+#          'Dictionary/dictionary.db '
+DB_NAME = 'C:/Users/caela/Documents/School/WC/13DTS/maoridictionary/dictionary.db'
 
 app = Flask(__name__)
 
@@ -183,7 +183,8 @@ def render_homepage():
                 # connect to the database
                 con = create_connection(DB_NAME)
 
-                query = "INSERT INTO words (id, maori, english, category, definition, difficulty_level) VALUES(NULL, ?, ?, ?, ?, ?)"
+                query = "INSERT INTO words (id, maori, english, category, definition, difficulty_level)" \
+                        " VALUES(NULL, ?, ?, ?, ?, ?)"
 
                 cur = con.cursor()  # You need this line next
                 try:
@@ -202,45 +203,51 @@ def render_homepage():
                            'html', logged_in=is_logged_in(), categories=fetch_categories())
 
 
-@app.route('/categories/<cat_id>')
+@app.route('/categories/<cat_id>', methods=["GET", "POST"])
 def render_categories(cat_id):
     con = create_connection(DB_NAME)
+    if request.method == "POST" and is_logged_in():
+        query = "DELETE FROM category WHERE id = ?"
+        cur = con.cursor()
+        cur.execute(query, (cat_id,))
+        con.commit()
+        con.close()
+        return redirect("/")
     query = "SELECT id, maori, english, definition, difficulty_level, images FROM words WHERE category=? " \
         # "ORDER BY maori_word ASC"
     cur = con.cursor()
     cur.execute(query, (cat_id,))
     definitions = cur.fetchall()
-    print(definitions)
     con.close()
-    categories = fetch_categories()
-    print(categories)
     return render_template('words.html', definitions=definitions, logged_in=is_logged_in(),
                            categories=fetch_categories())
 
 
-@app.route('/word/<word_id>')
+@app.route("/word/<word_id>", methods=["GET", "POST"])
 def render_detail(word_id):
     con = create_connection(DB_NAME)
-    query = "SELECT id, maori, english, definition, difficulty_level, images FROM words WHERE id=?"
+
+    query = "SELECT id, maori, english, definition, difficulty_level, images, category FROM words WHERE id=?"
     cur = con.cursor()
     cur.execute(query, (word_id,))
     definitions = cur.fetchall()
     definition = definitions[0]
-    con.close()
-
     if request.method == "POST" and is_logged_in():
         query = "DELETE FROM words WHERE id = ?"
-        cur. con.cursor()
-        cur.execute(query, word_id)
-        con.close
+        cur = con.cursor()
+        cur.execute(query, (word_id,))
+        con.commit()
+        con.close()
+        return redirect("/categories/" + str(definition[6]))
+    con.close()
 
     return render_template('detail.html', definition=definition, logged_in=is_logged_in(),
                            categories=fetch_categories())
 
 
-#@app.route("/delete", methods=["GET", "POST"])
-#def delete_category():
-#    if
+# @app.route("/delete", methods=["GET", "POST"])
+# def ():
+#     if
 
 if __name__ == '__main__':
     app.run(debug=True)
