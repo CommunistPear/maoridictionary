@@ -1344,113 +1344,128 @@
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <index id="496" parent="170" name="category_id_uindex">
+    <column id="496" parent="170" name="date_added">
+      <Position>3</Position>
+      <DataType>datetime|0s</DataType>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+    </column>
+    <index id="497" parent="170" name="category_id_uindex">
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="497" parent="170" name="category_pk">
+    <index id="498" parent="170" name="category_category_name_uindex">
+      <ColNames>category_name</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="499" parent="170" name="category_pk">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>category_id_uindex</UnderlyingIndexName>
     </key>
-    <column id="498" parent="171" name="type">
+    <column id="500" parent="171" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="499" parent="171" name="name">
+    <column id="501" parent="171" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="500" parent="171" name="tbl_name">
+    <column id="502" parent="171" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="501" parent="171" name="rootpage">
+    <column id="503" parent="171" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="502" parent="171" name="sql">
+    <column id="504" parent="171" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="503" parent="172" name="name">
+    <column id="505" parent="172" name="name">
       <Position>1</Position>
     </column>
-    <column id="504" parent="172" name="seq">
+    <column id="506" parent="172" name="seq">
       <Position>2</Position>
     </column>
-    <column id="505" parent="173" name="id">
+    <column id="507" parent="173" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="506" parent="173" name="email">
+    <column id="508" parent="173" name="email">
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="507" parent="173" name="f_name">
+    <column id="509" parent="173" name="f_name">
       <Position>3</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="508" parent="173" name="l_name">
+    <column id="510" parent="173" name="l_name">
       <Position>4</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="509" parent="173" name="password">
+    <column id="511" parent="173" name="password">
       <Position>5</Position>
       <DataType>varchar(24)|0s</DataType>
     </column>
-    <index id="510" parent="173" name="users_id_uindex">
+    <index id="512" parent="173" name="users_id_uindex">
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="511" parent="173" name="users_email_uindex">
+    <index id="513" parent="173" name="users_email_uindex">
       <ColNames>email</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="512" parent="173" name="users_pk">
+    <key id="514" parent="173" name="users_pk">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>users_id_uindex</UnderlyingIndexName>
     </key>
-    <column id="513" parent="174" name="maori">
+    <column id="515" parent="174" name="maori">
       <Position>1</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="514" parent="174" name="english">
+    <column id="516" parent="174" name="english">
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
-    <column id="515" parent="174" name="category">
+    <column id="517" parent="174" name="category">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="516" parent="174" name="definition">
+    <column id="518" parent="174" name="definition">
       <Position>4</Position>
       <DataType>varchar(300)|0s</DataType>
     </column>
-    <column id="517" parent="174" name="difficulty_level">
+    <column id="519" parent="174" name="difficulty_level">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="518" parent="174" name="images">
+    <column id="520" parent="174" name="images">
       <Position>6</Position>
       <DataType>varchar(30)|0s</DataType>
       <DefaultExpression>&apos;noimage.png&apos;</DefaultExpression>
     </column>
-    <column id="519" parent="174" name="id">
+    <column id="521" parent="174" name="id">
       <Position>7</Position>
       <DataType>integer|0s</DataType>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <key id="520" parent="174" name="words_pk">
+    <column id="522" parent="174" name="date_added">
+      <Position>8</Position>
+      <DataType>datetime|0s</DataType>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+    </column>
+    <key id="523" parent="174" name="words_pk">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="521" parent="174">
+    <foreign-key id="524" parent="174">
       <ColNames>category</ColNames>
       <RefTableName>category</RefTableName>
       <RefKeyName>category_pk</RefKeyName>

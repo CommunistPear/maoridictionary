@@ -83,6 +83,7 @@ def render_signup_page():
         try:
             cur.execute(query, (f_name, l_name, email, hashed_password))  # this line actually executes the query
         except sqlite3.IntegrityError:
+            con.close()
             return redirect('/signup?error=Email+is+already+used')
 
         con.commit()
@@ -138,7 +139,6 @@ def render_homepage():
     if request.method == "POST" and is_logged_in():
         if request.form.get('form') == 'category':
             category_name = request.form.get('category').strip().lower()
-            print(category_name)
             if len(category_name) < 3:
                 return redirect("/?error=Name+must+be+at+least+3+letters+long.")
             else:
@@ -150,8 +150,9 @@ def render_homepage():
                 cur = con.cursor()  # You need this line next
                 try:
                     cur.execute(query, (category_name,))  # this line actually executes the query
-                except:
-                    return redirect('/menu?error=Unknown+error')
+                except sqlite3.IntegrityError:
+                    con.close()
+                    return redirect('/?error=Category+already+exists')
 
                 con.commit()
                 con.close()
@@ -163,23 +164,10 @@ def render_homepage():
             english_word = request.form.get('english_word').strip().lower()
             definition = request.form.get('definition').strip().lower()
             category = request.form.get('category').strip()
-            difficulty_level = request.form.get('difficulty_level').strip().lower()
-
-            min_length = 2
-            if len(maori_word) < min_length:
-                return redirect(
-                    "/?error=" + urllib.parse.quote("Word name must be at least " + str(min_length) + " letters long."))
-            elif len(english_word) < min_length:
-                return redirect(
-                    "/?error=" + urllib.parse.quote("Word name must be at least " + str(min_length) + " letters long."))
-            elif len(definition) < min_length:
-                return redirect("/?error=" + urllib.parse.quote(
-                    "definition must be at least " + str(min_length) + " letters long."))
-            elif not category.isnumeric():
-                return redirect("/?error=" + urllib.parse.quote("Get out of my HTML."))
-            elif not difficulty_level.isnumeric() and 1 > int(difficulty_level) > 10:
-                return redirect("/?error=" + urllib.parse.quote("Difficulty must be between 1 and 10."))
-            else:
+            difficulty_level = request.form.get('difficulty_level').strip()
+            # validates
+            status = validate_words(maori_word, english_word, definition, category, difficulty_level)
+            if status == "":
                 # connect to the database
                 con = create_connection(DB_NAME)
 
@@ -190,10 +178,11 @@ def render_homepage():
                 try:
                     cur.execute(query, (maori_word, english_word, category, definition,
                                         difficulty_level))  # this line actually executes the query
+                    con.commit()
                 except:
+                    con.close()
                     return redirect("/menu?error=" + urllib.parse.quote("Unknown error"))
 
-                con.commit()
                 con.close()
 
             return redirect("/?message=" + urllib.parse.quote("Thank you for adding a word"))
@@ -209,6 +198,7 @@ def render_categories(cat_id):
     if request.method == "POST" and is_logged_in():
         query = "DELETE FROM category WHERE id = ?"
         cur = con.cursor()
+        cur.execute("PRAGMA foreign_keys = ON")
         cur.execute(query, (cat_id,))
         con.commit()
         con.close()
@@ -233,12 +223,33 @@ def render_detail(word_id):
     definitions = cur.fetchall()
     definition = definitions[0]
     if request.method == "POST" and is_logged_in():
-        query = "DELETE FROM words WHERE id = ?"
-        cur = con.cursor()
-        cur.execute(query, (word_id,))
-        con.commit()
-        con.close()
-        return redirect("/categories/" + str(definition[6]))
+        if request.form.get('form') == 'edit':
+            maori_word = request.form.get('maori_word').strip().lower()
+            english_word = request.form.get('english_word').strip().lower()
+            definition = request.form.get('definition').strip().lower()
+            category = request.form.get('category').strip()
+            difficulty_level = request.form.get('difficulty_level').strip()
+            status = validate_words(maori_word, english_word, definition, category, difficulty_level)
+            if status == "":
+                query = "UPDATE words SET maori = ?, english = ?, definition = ?, " \
+                        " category = ?, difficulty_level = ? WHERE id = ?"
+                cur = con.cursor()
+                cur.execute(query, (maori_word, english_word, definition, category,
+                                    difficulty_level, word_id))
+                con.commit()
+            else:
+                con.close()
+                return redirect(status)
+
+            con.close()
+            return redirect("/word/" + word_id)
+        elif request.form.get('form') == 'delete':
+            query = "DELETE FROM words WHERE id = ?"
+            cur = con.cursor()
+            cur.execute(query, (word_id,))
+            con.commit()
+            con.close()
+            return redirect("/categories/" + str(definition[6]))
     con.close()
 
     return render_template('detail.html', definition=definition, logged_in=is_logged_in(),
@@ -248,6 +259,24 @@ def render_detail(word_id):
 # @app.route("/delete", methods=["GET", "POST"])
 # def ():
 #     if
+
+def validate_words(maori_word, english_word, definition, category, difficulty_level):
+    min_length = 2
+    if len(maori_word) < min_length:
+        return "/?error=" + urllib.parse.quote("Word name must be at least " + str(min_length) + " letters long.")
+    elif len(english_word) < min_length:
+        return "/?error=" + urllib.parse.quote("Word name must be at least " + str(min_length) + " letters long.")
+    elif len(definition) < min_length:
+        return "/?error=" + urllib.parse.quote(
+            "definition must be at least " + str(min_length) + " letters long.")
+    elif not category.isnumeric():
+        return "/?error=" + urllib.parse.quote("Get out of my HTML.")
+    elif not difficulty_level.isnumeric() and 1 > int(difficulty_level) > 10:
+        return "/?error=" + urllib.parse.quote("Difficulty must be between 1 and 10.")
+
+    else:
+        return ""
+
 
 if __name__ == '__main__':
     app.run(debug=True)
