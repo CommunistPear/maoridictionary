@@ -4,7 +4,9 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-DB_NAME = 'dictionary.db'
+# DB_NAME = "dictionary.db"
+DB_NAME = "C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/" \
+          "Maori Dictionary/Maori Dictionary/dictionary.db"
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
@@ -12,16 +14,16 @@ app.secret_key = "sefofe@#$%**jkvbuseb22BUJBBOPVIUBZPuboiserfbuso@#@##21ashjsrf7
 
 
 # creates login page
-@app.route('/login', methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def render_login_page():
     if is_logged_in():
-        return redirect('/')
+        return redirect("/")
     print(request.form)
     if request.method == "POST":
         # takes email input and strips it and makes it lowercase so it is consistent in the database.
-        email = request.form['email'].strip().lower()
+        email = request.form["email"].strip().lower()
         # removes spaces at the end of the password that may have been inputted accidentally.
-        password = request.form['password'].strip()
+        password = request.form["password"].strip()
         # selects the id, first name and password from the Users table where the email has been entered.
         query = """SELECT id, f_name, password FROM users WHERE email = ?"""
         # creates a connection to the database.
@@ -38,43 +40,43 @@ def render_login_page():
             firstname = user_data[0][1]
             db_password = user_data[0][2]
         except IndexError:
-            return redirect("/login?error=Email+invalid+or+password+incorrect")
+            return redirect("/login?error=" + urllib.parse.quote("Email invalid or password incorrect"))
 
         # check if the password is incorrect for that email address
-
         if not bcrypt.check_password_hash(db_password, password):
-            return redirect(request.referrer + "?error=Email+invalid+or+password+incorrect")
+            return redirect(request.referrer + ("/login?error=" + urllib.parse.quote("Email invalid or "
+                                                                                     "password incorrect")))
 
-        session['email'] = email
-        session['userid'] = userid
-        session['firstname'] = firstname
-        return redirect('/')
+        session["email"] = email
+        session["userid"] = userid
+        session["firstname"] = firstname
+        return redirect("/")
 
     return render_template('login.html', logged_in=is_logged_in())
 
 
 # creates a signup page for creating accounts.
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route("/signup", methods=["GET", "POST"])
 def render_signup_page():
     # checks if the user is logged in.
     if is_logged_in():
         # if the user is logged in, redirects to home page.
-        return redirect('/')
+        return redirect("/")
     # retrieves information from HTML form about signing up.
     # Strips all inputs and gives names title case and makes email lower case.
-    if request.method == 'POST':
+    if request.method == "POST":
         print(request.form)
-        f_name = request.form.get('f_name').strip().title()
-        l_name = request.form.get('l_name').strip().title()
-        email = request.form.get('email').strip().lower()
-        password = request.form.get('password')
-        password2 = request.form.get('password2')
+        f_name = request.form.get("f_name").strip().title()
+        l_name = request.form.get("l_name").strip().title()
+        email = request.form.get("email").strip().lower()
+        password = request.form.get("password")
+        password2 = request.form.get("password2")
         # checks if the passwords the user inputs matches to ensure they didn't make any mistakes.
         if password != password2:
-            return redirect('/signup?error=Passwords+dont+match')
+            return redirect("/signup?error=" + urllib.parse.quote("Passwords don't match"))
         # for extra security, prevents users from having passwords that are fewer than 8 characters long.
         if len(password) < 8:
-            return redirect('/signup?error=Password+must+be+8+characters+or+more')
+            return redirect("/signup?error=" + urllib.parse.quote("Password must be 8 characters or more"))
         # hashes password to ensure security.
         hashed_password = bcrypt.generate_password_hash(password)
         # connects to database
@@ -89,13 +91,14 @@ def render_signup_page():
         # Prevents duplicate emails from being entered.
         except sqlite3.IntegrityError:
             con.close()
-            return redirect('/signup?error=Email+is+already+used')
+            return redirect("/signup?error=" + urllib.parse.quote("Email is already used"))
+
         # commits new information to the database
         con.commit()
         con.close()
-        return redirect('/login')
+        return redirect("/login")
     # loads HTML for signup page.
-    return render_template('signup.html', logged_in=is_logged_in())
+    return render_template("signup.html", logged_in=is_logged_in())
 
 
 # Creates logout page.
@@ -104,7 +107,7 @@ def logout():
     print(list(session.keys()))
     [session.pop(key) for key in list(session.keys())]
     print(list(session.keys()))
-    return redirect('/?message=See+you+next+time!')
+    return redirect("/?message=" + urllib.parse.quote("See you next time!"))
 
 
 # function that determines whether a user is logged in or not.
@@ -152,7 +155,7 @@ def render_homepage():
             category_name = request.form.get("category").strip().lower()
             # prevents categories with names shorter than
             if len(category_name) < 3:
-                return redirect("/?error=Name+must+be+at+least+3+letters+long.")
+                return redirect("/?error=" + urllib.parse.quote("Name must be at least 3 letters long."))
             else:
                 # connect to the database
                 con = create_connection(DB_NAME)
@@ -165,7 +168,7 @@ def render_homepage():
                 # Prevents duplicate categories from being added to the database.
                 except sqlite3.IntegrityError:
                     con.close()
-                    return redirect("/?error=Category+already+exists")
+                    return redirect("/?error=" + urllib.parse.quote("Category already exists"))
 
                 con.commit()
                 con.close()
