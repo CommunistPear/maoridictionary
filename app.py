@@ -4,9 +4,7 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 
-# DB_NAME = "dictionary.db"
-DB_NAME = "C:/Users/17075/OneDrive - Wellington College/Technology/DTS/Y13/" \
-          "Maori Dictionary/Maori Dictionary/dictionary.db"
+DB_NAME = "dictionary.db"
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
@@ -43,6 +41,7 @@ def render_login_page():
             return redirect("/login?error=" + urllib.parse.quote("Email invalid or password incorrect"))
 
         # check if the password is incorrect for that email address
+
         if not bcrypt.check_password_hash(db_password, password):
             return redirect(request.referrer + ("/login?error=" + urllib.parse.quote("Email invalid or "
                                                                                      "password incorrect")))
@@ -52,7 +51,7 @@ def render_login_page():
         session["firstname"] = firstname
         return redirect("/")
 
-    return render_template('login.html', logged_in=is_logged_in())
+    return render_template("login.html", logged_in=is_logged_in())
 
 
 # creates a signup page for creating accounts.
@@ -73,10 +72,10 @@ def render_signup_page():
         password2 = request.form.get("password2")
         # checks if the passwords the user inputs matches to ensure they didn't make any mistakes.
         if password != password2:
-            return redirect("/signup?error=" + urllib.parse.quote("Passwords don't match"))
+            return redirect("/?message=" + urllib.parse.quote("Passwords dont match"))
         # for extra security, prevents users from having passwords that are fewer than 8 characters long.
         if len(password) < 8:
-            return redirect("/signup?error=" + urllib.parse.quote("Password must be 8 characters or more"))
+            return redirect("/?message=" + urllib.parse.quote("Password must be 8 characters or more"))
         # hashes password to ensure security.
         hashed_password = bcrypt.generate_password_hash(password)
         # connects to database
@@ -91,8 +90,7 @@ def render_signup_page():
         # Prevents duplicate emails from being entered.
         except sqlite3.IntegrityError:
             con.close()
-            return redirect("/signup?error=" + urllib.parse.quote("Email is already used"))
-
+            return redirect("/?message=" + urllib.parse.quote("messageEmail+is+already+used"))
         # commits new information to the database
         con.commit()
         con.close()
@@ -102,7 +100,7 @@ def render_signup_page():
 
 
 # Creates logout page.
-@app.route('/logout')
+@app.route("/logout")
 def logout():
     print(list(session.keys()))
     [session.pop(key) for key in list(session.keys())]
@@ -155,7 +153,7 @@ def render_homepage():
             category_name = request.form.get("category").strip().lower()
             # prevents categories with names shorter than
             if len(category_name) < 3:
-                return redirect("/?error=" + urllib.parse.quote("Name must be at least 3 letters long."))
+                return redirect("/?message=" + urllib.parse.quote("Name must be at least 3 letters long."))
             else:
                 # connect to the database
                 con = create_connection(DB_NAME)
@@ -168,7 +166,7 @@ def render_homepage():
                 # Prevents duplicate categories from being added to the database.
                 except sqlite3.IntegrityError:
                     con.close()
-                    return redirect("/?error=" + urllib.parse.quote("Category already exists"))
+                    return redirect("/?message=" + urllib.parse.quote("Category already exists"))
 
                 con.commit()
                 con.close()
@@ -176,14 +174,14 @@ def render_homepage():
             return redirect("/?message=" + urllib.parse.quote("Thank you for creating a category!"))
         # gets information from form on the webpage, strips them of extra characters,
         # makes them lowercase and adds applies them to a variable which is called on by the query.
-        if request.form.get('form') == 'word':
-            maori_word = request.form.get('maori_word').strip().lower()
-            english_word = request.form.get('english_word').strip().lower()
-            definition = request.form.get('definition').strip().lower()
-            category = request.form.get('category').strip()
-            difficulty_level = request.form.get('difficulty_level').strip()
+        if request.form.get("form") == "word":
+            maori_word = request.form.get("maori_word").strip().lower()
+            english_word = request.form.get("english_word").strip().lower()
+            definition = request.form.get("definition").strip().lower()
+            category = request.form.get("category").strip()
+            difficulty_level = request.form.get("difficulty_level").strip()
             # validates that the words/definitions are over a certain length and are within required ranges.
-            status = validate_words(maori_word, english_word, definition, category, difficulty_level)
+            status = validate_words(0, maori_word, english_word, definition, category, difficulty_level)
             # if validate_words returns blank everything is correct and so connects to the database and inserts.
             if status == "":
                 # connect to the database
@@ -199,18 +197,19 @@ def render_homepage():
                     con.commit()
                 except:
                     con.close()
-                    return redirect("/menu?error=" + urllib.parse.quote("Unknown error"))
+                    return redirect("/menu?message=" + urllib.parse.quote("Unknown error"))
 
                 con.close()
+                return redirect("/?message=" + urllib.parse.quote("Thank you for adding a word"))
+            else:
+                return redirect(status)
 
-            return redirect("/?message=" + urllib.parse.quote("Thank you for adding a word"))
-
-    return render_template('home.'
-                           'html', logged_in=is_logged_in(), categories=fetch_categories())
+    return render_template("home."
+                           "html", logged_in=is_logged_in(), categories=fetch_categories())
 
 
 # route for parts of the app concerning the deletion of categories and the lists of words within each category.
-@app.route('/categories/<cat_id>', methods=["GET", "POST"])
+@app.route("/categories/<cat_id>", methods=["GET", "POST"])
 def render_categories(cat_id):
     con = create_connection(DB_NAME)
     if request.method == "POST" and is_logged_in():
@@ -229,7 +228,7 @@ def render_categories(cat_id):
     cur.execute(query, (cat_id,))
     definitions = cur.fetchall()
     con.close()
-    return render_template('words.html', definitions=definitions, logged_in=is_logged_in(),
+    return render_template("words.html", definitions=definitions, logged_in=is_logged_in(),
                            categories=fetch_categories())
 
 
@@ -246,14 +245,14 @@ def render_detail(word_id):
         # if request.form.get is equal to edit it means that someone wishes to edit the word opposed to deleting it.
         # this is important to include as the edit and delete forms are located on the same page and if they are
         # mixed up it could be a disaster.
-        if request.form.get('form') == 'edit':
-            maori_word = request.form.get('maori_word').strip().lower()
-            english_word = request.form.get('english_word').strip().lower()
-            definition = request.form.get('definition').strip().lower()
-            category = request.form.get('category').strip()
-            difficulty_level = request.form.get('difficulty_level').strip()
+        if request.form.get("form") == "edit":
+            maori_word = request.form.get("maori_word").strip().lower()
+            english_word = request.form.get("english_word").strip().lower()
+            definition = request.form.get("definition").strip().lower()
+            category = request.form.get("category").strip()
+            difficulty_level = request.form.get("difficulty_level").strip()
             # validates words using validate_words function
-            status = validate_words(maori_word, english_word, definition, category, difficulty_level)
+            status = validate_words(word_id, maori_word, english_word, definition, category, difficulty_level)
             # if status supplied by verification function is blank then no errors were found so it continues.
             if status == "":
                 # updates the database with new information, overwriting the old information.
@@ -266,13 +265,14 @@ def render_detail(word_id):
             else:
                 con.close()
                 return redirect(status)
+
             # closes the connection to the database
             con.close()
             # redirects you to the new location of the word within the database/website.
             return redirect("/word/" + word_id)
         # ensures that the form being submitted is the correct form so you don't edit the form when you wish to
         # delete it
-        elif request.form.get('form') == 'delete':
+        elif request.form.get("form") == "delete":
             query = "DELETE FROM words WHERE id = ?"
             cur = con.cursor()
             cur.execute(query, (word_id,))
@@ -281,7 +281,7 @@ def render_detail(word_id):
             return redirect("/categories/" + str(definition[6]))
     con.close()
 
-    return render_template('detail.html', definition=definition, logged_in=is_logged_in(),
+    return render_template("detail.html", definition=definition, logged_in=is_logged_in(),
                            categories=fetch_categories())
 
 
@@ -289,23 +289,32 @@ def render_detail(word_id):
 # urllib.parse.quote allows for spaces to be put into the URL.
 # min_length is the minimum length for the words and definition.
 # This allows for the minimum length to be changed easily.
-def validate_words(maori_word, english_word, definition, category, difficulty_level):
+def validate_words(word_id, maori_word, english_word, definition, category, difficulty_level):
     min_length = 2
     if len(maori_word) < min_length:
-        return "/?error=" + urllib.parse.quote("Word name must be at least " + str(min_length) + " letters long.")
+        return "/?message=" + urllib.parse.quote("Word name must be at least " + str(min_length) + " letters long.")
     elif len(english_word) < min_length:
-        return "/?error=" + urllib.parse.quote("Word name must be at least " + str(min_length) + " letters long.")
+        return "/?message=" + urllib.parse.quote("Word name must be at least " + str(min_length) + " letters long.")
     elif len(definition) < min_length:
-        return "/?error=" + urllib.parse.quote(
+        return "/?message=" + urllib.parse.quote(
             "definition must be at least " + str(min_length) + " letters long.")
     elif not category.isnumeric():
         # This error can only occur if someone tampers with the HTML so I added a humorous error.
-        return "/?error=" + urllib.parse.quote("Get out of my HTML.")
+        return "/?message=" + urllib.parse.quote("Get out of my HTML.")
     elif not difficulty_level.isnumeric() and 1 > int(difficulty_level) > 10:
-        return "/?error=" + urllib.parse.quote("Difficulty must be between 1 and 10.")
+        return "/?message=" + urllib.parse.quote("Difficulty must be between 1 and 10.")
 
     else:
-        return ""
+        con = create_connection(DB_NAME)
+        query = "SELECT id FROM words WHERE maori=? AND english =? AND id<>?"
+        cur = con.cursor()
+        cur.execute(query, (maori_word, english_word, word_id,))
+        word_list = cur.fetchall()
+
+        if len(word_list) > 0:
+            return "/?message=" + urllib.parse.quote("Word already exists in dictionary.")
+
+    return ""
 
 
 if __name__ == '__main__':
