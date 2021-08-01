@@ -288,7 +288,8 @@ def render_detail(word_id):
 # function that validates words and provides error codes for the URL if there is a problem.
 # urllib.parse.quote allows for spaces to be put into the URL.
 # min_length is the minimum length for the words and definition.
-# This allows for the minimum length to be changed easily.
+# min_length allows for the minimum length to be changed easily.
+# validate_words function also prevents words from being added to the dictionary that are already present.
 def validate_words(word_id, maori_word, english_word, definition, category, difficulty_level):
     min_length = 2
     if len(maori_word) < min_length:
