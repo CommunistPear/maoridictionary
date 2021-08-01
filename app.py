@@ -12,7 +12,7 @@ app.secret_key = "sefofe@#$%**jkvbuseb22BUJBBOPVIUBZPuboiserfbuso@#@##21ashjsrf7
 
 
 # creates login page
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login/", methods=["GET", "POST"])
 def render_login_page():
     if is_logged_in():
         return redirect("/")
@@ -38,13 +38,13 @@ def render_login_page():
             firstname = user_data[0][1]
             db_password = user_data[0][2]
         except IndexError:
-            return redirect("/login?error=" + urllib.parse.quote("Email invalid or password incorrect"))
+            return redirect("/?message=" + urllib.parse.quote("Email invalid or password incorrect"))
 
         # check if the password is incorrect for that email address
 
         if not bcrypt.check_password_hash(db_password, password):
-            return redirect(request.referrer + ("/login?error=" + urllib.parse.quote("Email invalid or "
-                                                                                     "password incorrect")))
+            return redirect(request.referrer + ("/?message=" + urllib.parse.quote("Email invalid or "
+                                                                                  "password incorrect")))
 
         session["email"] = email
         session["userid"] = userid
@@ -55,7 +55,7 @@ def render_login_page():
 
 
 # creates a signup page for creating accounts.
-@app.route("/signup", methods=["GET", "POST"])
+@app.route("/signup/", methods=["GET", "POST"])
 def render_signup_page():
     # checks if the user is logged in.
     if is_logged_in():
@@ -72,10 +72,10 @@ def render_signup_page():
         password2 = request.form.get("password2")
         # checks if the passwords the user inputs matches to ensure they didn't make any mistakes.
         if password != password2:
-            return redirect("/?message=" + urllib.parse.quote("Passwords dont match"))
+            return redirect("/signup/?message=" + urllib.parse.quote("Passwords don't match"))
         # for extra security, prevents users from having passwords that are fewer than 8 characters long.
         if len(password) < 8:
-            return redirect("/?message=" + urllib.parse.quote("Password must be 8 characters or more"))
+            return redirect("/signup/?message=" + urllib.parse.quote("Password must be 8 characters or more"))
         # hashes password to ensure security.
         hashed_password = bcrypt.generate_password_hash(password)
         # connects to database
@@ -90,7 +90,7 @@ def render_signup_page():
         # Prevents duplicate emails from being entered.
         except sqlite3.IntegrityError:
             con.close()
-            return redirect("/?message=" + urllib.parse.quote("messageEmail+is+already+used"))
+            return redirect("/signup/?message=" + urllib.parse.quote("Email is already used"))
         # commits new information to the database
         con.commit()
         con.close()
@@ -100,7 +100,7 @@ def render_signup_page():
 
 
 # Creates logout page.
-@app.route("/logout")
+@app.route("/logout/")
 def logout():
     print(list(session.keys()))
     [session.pop(key) for key in list(session.keys())]
